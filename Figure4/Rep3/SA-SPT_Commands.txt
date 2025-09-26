@@ -1,0 +1,146 @@
+import pandas as pd, numpy as np, matplotlib.pyplot as plt
+from saspt import StateArray, RBME
+
+##Bootstrapping
+def sample_with_repl(sample_size, data):
+    sampled_traj = np.random.choice(data["trajectory"].unique(), size = sample_size, replace = True)
+    duplicates = []
+    for i in range(0, len(sampled_traj)):
+        for j in range(i+1, len(sampled_traj)):
+            if(sampled_traj[i]==sampled_traj[j]):
+                duplicates.append(sampled_traj[i])
+    data_new1 = data.query('trajectory in @sampled_traj')
+    data_new2 = data.query('trajectory in @duplicates')
+    data_new2.trajectory = data_new2.trajectory+max(sampled_traj)
+    result = pd.concat([data_new1, data_new2])
+    return result
+
+def bootstrap(sample_size, num_iter, data):
+    occupations_list = []
+    for i in range(num_iter):
+        tmp = sample_with_repl(sample_size, data)
+        SA = StateArray.from_detections(tmp, **settings)
+        occupations_list.append(SA.occupations_dataframe)
+    occupations = pd.concat(occupations_list)
+    return occupations
+
+
+
+N = 20000
+num_iter = 100
+settings = dict(
+	likelihood_type = RBME,
+	pixel_size_um = 0.100,
+	frame_interval = 0.003,
+	#focal_depth = 0.7,
+	sample_size = N,
+	progress_bar = True,
+)
+
+data = pd.read_csv('Data/SA-SPT_20220620/Live.csv')
+occupations_bs = bootstrap(N, num_iter, data)
+occupations_bs.to_csv('Data/SA-SPT_20220620/Live_occupations_bs.csv')
+
+data = pd.read_csv('Data/SA-SPT_20220620/Fixed.csv')
+occupations_bs = bootstrap(N, num_iter, data)
+occupations_bs.to_csv('Data/SA-SPT_20220620/Fixed_occupations_bs.csv')
+
+data = pd.read_csv('Data/SA-SPT_20220620/ImmobDye.csv')
+occupations_bs = bootstrap(N, num_iter, data)
+occupations_bs.to_csv('Data/SA-SPT_20220620/ImmobDye_occupations_bs.csv')
+
+
+
+##Everything
+import pandas as pd, numpy as np, matplotlib.pyplot as plt
+from saspt import StateArray, RBME
+
+N = 100000
+settings = dict(
+	likelihood_type = RBME,
+	pixel_size_um = 0.100,
+	frame_interval = 0.003,
+	#focal_depth = 0.7,
+	sample_size = N,
+	progress_bar = True,
+)
+
+
+data = pd.read_csv('Data/SA-SPT_20220620/Live.csv')
+SA = StateArray.from_detections(data, **settings)
+occupations = SA.occupations_dataframe
+occupations.to_csv('Data/SA-SPT_20220620/Live_occupations_all.csv')
+SA.plot_occupations('Data/SA-SPT_20220620/Live_rbme_occupations.png')
+SA.plot_assignment_probabilities('Data/SA-SPT_20220620/Live_rbme_assignment_probabilities.png')
+SA.plot_temporal_assignment_probabilities('Data/SA-SPT_20220620/Live_rbme_temporal.png')
+
+
+data = pd.read_csv('Data/SA-SPT_20220620/Fixed.csv')
+SA = StateArray.from_detections(data, **settings)
+occupations = SA.occupations_dataframe
+occupations.to_csv('Data/SA-SPT_20220620/Fixed_occupations_all.csv')
+SA.plot_occupations('Data/SA-SPT_20220620/Fixed_rbme_occupations.png')
+SA.plot_assignment_probabilities('Data/SA-SPT_20220620/Fixed_rbme_assignment_probabilities.png')
+SA.plot_temporal_assignment_probabilities('Data/SA-SPT_20220620/Fixed_rbme_temporal.png')
+
+data = pd.read_csv('Data/SA-SPT_20220620/ImmobDye.csv')
+SA = StateArray.from_detections(data, **settings)
+occupations = SA.occupations_dataframe
+occupations.to_csv('Data/SA-SPT_20220620/ImmobDye_occupations_all.csv')
+SA.plot_occupations('Data/SA-SPT_20220620/ImmobDye_rbme_occupations.png')
+SA.plot_assignment_probabilities('Data/SA-SPT_20220620/ImmobDye_rbme_assignment_probabilities.png')
+SA.plot_temporal_assignment_probabilities('Data/SA-SPT_20220620/ImmobDye_rbme_temporal.png')
+
+###New: plot same number of traj as in samples
+import pandas as pd, numpy as np, matplotlib.pyplot as plt
+from saspt import StateArray, RBME
+
+#Bootstrapping
+def sample_with_repl(sample_size, data):
+    sampled_traj = np.random.choice(data["trajectory"].unique(), size = sample_size, replace = True)
+    duplicates = []
+    for i in range(0, len(sampled_traj)):
+        for j in range(i+1, len(sampled_traj)):
+            if(sampled_traj[i]==sampled_traj[j]):
+                duplicates.append(sampled_traj[i])
+    data_new1 = data.query('trajectory in @sampled_traj')
+    data_new2 = data.query('trajectory in @duplicates')
+    data_new2.trajectory = data_new2.trajectory+max(sampled_traj)
+    result = pd.concat([data_new1, data_new2])
+    return result
+
+def bootstrap(sample_size, num_iter, data):
+    occupations_list = []
+    for i in range(num_iter):
+        tmp = sample_with_repl(sample_size, data)
+        SA = StateArray.from_detections(tmp, **settings)
+        occupations_list.append(SA.occupations_dataframe)
+    occupations = pd.concat(occupations_list)
+    return occupations
+
+
+
+N = 5000
+num_iter = 100
+settings = dict(
+	likelihood_type = RBME,
+	pixel_size_um = 0.100,
+	frame_interval = 0.003,
+	#focal_depth = 0.7,
+	sample_size = N,
+	progress_bar = True,
+)
+
+#data = pd.read_csv('Data/SA-SPT_20220620/Live.csv')
+#occupations_bs = bootstrap(N, num_iter, data)
+#occupations_bs.to_csv('Data/SA-SPT_20220620/Live_occupations_bs.csv')
+
+data = pd.read_csv('Data/Fixed.csv')
+occupations_bs = bootstrap(N, num_iter, data)
+occupations_bs.to_csv('Fixed_occupations_5000traj_bs.csv')
+
+#data = pd.read_csv('Data/SA-SPT_20220620/ImmobDye.csv')
+#occupations_bs = bootstrap(N, num_iter, data)
+#occupations_bs.to_csv('Data/SA-SPT_20220620/ImmobDye_occupations_bs.csv')
+
+
