@@ -6,5 +6,5 @@ The scripts are organised into folders based on the figure from the publication 
 The raw data for this analysis is available at Zenodo DOIs 10.5281/zenodo.17129884, 10.5281/zenodo.17176857 and 10.5281/zenodo.17197184. Any additional intermediate files needed for running the scripts are available upon request.
 
 Please feel free to contact the authors with any queries regarding the code:
-Dr Aleksandra Ochirova aj531@cam.ac.uk or aleksandra_ochirova@shsmu.edu.cn
-Prof Ernest Laue (corresponding author) edl1@cam.ac.uk
+- Dr Aleksandra Ochirova aj531@cam.ac.uk or aleksandra_ochirova@shsmu.edu.cn
+- Prof Ernest Laue (corresponding author) edl1@cam.ac.uk
