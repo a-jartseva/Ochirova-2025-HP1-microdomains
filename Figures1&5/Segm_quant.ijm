@@ -1,12 +1,12 @@
-folder = "/home/sasha/Science/PhD/Laue_lab/Microscopy/Confocal/Comparison_HighLow/20230920/";
-hl = newArray("High", "Low");
-for (f = 1; f < 8; f++) {
-	for (i = 0; i < lengthOf(hl); i++) {
-		open(folder + "MAX_" + hl[i] + "_Pos" + d2s(f, 0) + "_Airy.tif");
+folder = "/home/sasha/Science/PhD/Laue_lab/Microscopy/Confocal/Comparison_Higbasenamesow/20230920/";
+basenames = newArray("20230802", "20230920");
+for (f = 1; f < 7; f++) {
+	for (i = 0; i < lengthOf(basenames); i++) {
+		open(folder + "MAX_" + basenames[i] + "_Pos" + d2s(f, 0) + "_Airy.tif");
 		run("Split Channels");
-		selectImage("C1-MAX_" + hl[i] + "_Pos" + d2s(f, 0) + "_Airy.tif");
+		selectImage("C1-MAX_" + basenames[i] + "_Pos" + d2s(f, 0) + "_Airy.tif");
 		rename("DNA");
-		selectImage("C2-MAX_" + hl[i] + "_Pos" + d2s(f, 0) + "_Airy.tif");
+		selectImage("C2-MAX_" + basenames[i] + "_Pos" + d2s(f, 0) + "_Airy.tif");
 		rename("HP1");
 		imageCalculator("Add create 32-bit", "DNA","HP1");
 		rename("Sum");
@@ -17,7 +17,7 @@ for (f = 1; f < 8; f++) {
 		run("Set Measurements...", "area mean min max area_fraction redirect=None decimal=3");
 		run("Analyze Particles...", "clear add");
 		waitForUser;
-		roiManager("Save", folder + "Automatic_quantification/" + hl[i] + "_Pos" + d2s(f, 0) + "_roi.zip");
+		roiManager("Save", folder + "Automatic_quantification/" + basenames[i] + "_Pos" + d2s(f, 0) + "_roi.zip");
 		nROIs = roiManager("count");
 		for (j=0; j<nROIs; j++){
 			selectImage("DNA");
@@ -54,7 +54,7 @@ for (f = 1; f < 8; f++) {
 		}
 		selectImage("DNA_mask_old");
 		run("Convert to Mask");
-		saveAs("tiff", folder + "Automatic_quantification/" + hl[i] + "_Pos" + d2s(f, 0) + "_DNA_mask.tif");
+		saveAs("tiff", folder + "Automatic_quantification/" + basenames[i] + "_Pos" + d2s(f, 0) + "_DNA_mask.tif");
 		rename("DNA_mask");
 		
 		selectImage("HP1");
@@ -69,7 +69,7 @@ for (f = 1; f < 8; f++) {
 		waitForUser;
 		selectImage("HP1_mask");
 		run("Convert to Mask");
-		saveAs("tiff", folder + "Automatic_quantification/" + hl[i] + "_Pos" + d2s(f, 0) + "_HP1_mask.tif");
+		saveAs("tiff", folder + "Automatic_quantification/" + basenames[i] + "_Pos" + d2s(f, 0) + "_HP1_mask.tif");
 		rename("HP1_mask");
 		
 		//Measurements per cell
@@ -89,7 +89,7 @@ for (f = 1; f < 8; f++) {
 			roiManager("Select", j);
 			run("Measure");
 		}
-		saveAs("Results", folder + "Automatic_quantification/" + hl[i] + "_Pos" + d2s(f, 0) + "_perCell.csv");
+		saveAs("Results", folder + "Automatic_quantification/" + basenames[i] + "_Pos" + d2s(f, 0) + "_perCell.csv");
 		run("Clear Results");
 		
 		//Measurements per DNA focus
@@ -101,11 +101,11 @@ for (f = 1; f < 8; f++) {
 			run("Analyze Particles...", "size=20-Infinity pixel display summarize");
 		}
 		selectWindow("Summary");
-		saveAs("Results", folder + "Automatic_quantification/" + hl[i] + "_Pos" + d2s(f, 0) + "_focusSummary_DNA.csv");
-		NumberofRows=Table.size(hl[i] + "_Pos" + d2s(f, 0) + "_focusSummary_DNA.csv");
-		Table.deleteRows(0, NumberofRows-1, hl[i] + "_Pos" + d2s(f, 0) + "_focusSummary_DNA.csv");
+		saveAs("Results", folder + "Automatic_quantification/" + basenames[i] + "_Pos" + d2s(f, 0) + "_focusSummary_DNA.csv");
+		NumberofRows=Table.size(basenames[i] + "_Pos" + d2s(f, 0) + "_focusSummary_DNA.csv");
+		Table.deleteRows(0, NumberofRows-1, basenames[i] + "_Pos" + d2s(f, 0) + "_focusSummary_DNA.csv");
 		selectWindow("Results");
-		saveAs("Results", folder + "Automatic_quantification/" + hl[i] + "_Pos" + d2s(f, 0) + "_perFocus_DNA.csv");
+		saveAs("Results", folder + "Automatic_quantification/" + basenames[i] + "_Pos" + d2s(f, 0) + "_perFocus_DNA.csv");
 		run("Clear Results");
 		
 		//Measurements per HP1 focus
@@ -117,11 +117,11 @@ for (f = 1; f < 8; f++) {
 			run("Analyze Particles...", "size=10-Infinity pixel display summarize");
 		}
 		selectWindow("Summary");
-		saveAs("Results", folder + "Automatic_quantification/" + hl[i] + "_Pos" + d2s(f, 0) + "_focusSummary_HP1.csv");
-		NumberofRows=Table.size(hl[i] + "_Pos" + d2s(f, 0) + "_focusSummary_HP1.csv");
-		Table.deleteRows(0, NumberofRows-1, hl[i] + "_Pos" + d2s(f, 0) + "_focusSummary_HP1.csv");
+		saveAs("Results", folder + "Automatic_quantification/" + basenames[i] + "_Pos" + d2s(f, 0) + "_focusSummary_HP1.csv");
+		NumberofRows=Table.size(basenames[i] + "_Pos" + d2s(f, 0) + "_focusSummary_HP1.csv");
+		Table.deleteRows(0, NumberofRows-1, basenames[i] + "_Pos" + d2s(f, 0) + "_focusSummary_HP1.csv");
 		selectWindow("Results");
-		saveAs("Results", folder + "Automatic_quantification/" + hl[i] + "_Pos" + d2s(f, 0) + "_perFocus_HP1.csv");
+		saveAs("Results", folder + "Automatic_quantification/" + basenames[i] + "_Pos" + d2s(f, 0) + "_perFocus_HP1.csv");
 		run("Clear Results");
 		
 		waitForUser;
@@ -141,7 +141,7 @@ for (f = 1; f < 8; f++) {
 			close();
 		}
 		selectWindow("Results");
-		saveAs("Results", folder + "Automatic_quantification/" + hl[i] + "_Pos" + d2s(f, 0) + "_outsideFoci_DNA.csv");
+		saveAs("Results", folder + "Automatic_quantification/" + basenames[i] + "_Pos" + d2s(f, 0) + "_outsideFoci_DNA.csv");
 		run("Clear Results");
 		
 		//Measurements per nucleus outside of HP1 foci
@@ -159,7 +159,7 @@ for (f = 1; f < 8; f++) {
 			close();
 		}
 		selectWindow("Results");
-		saveAs("Results", folder + "Automatic_quantification/" + hl[i] + "_Pos" + d2s(f, 0) + "_outsideFoci_HP1.csv");
+		saveAs("Results", folder + "Automatic_quantification/" + basenames[i] + "_Pos" + d2s(f, 0) + "_outsideFoci_HP1.csv");
 		run("Clear Results");
 		
 		run("Close All");
