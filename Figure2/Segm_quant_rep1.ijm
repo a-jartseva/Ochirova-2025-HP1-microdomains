@@ -1,13 +1,14 @@
 folder = "/home/sasha/Science/PhD/Laue_lab/Microscopy/Confocal/Histone_marks/20220201_HP1b-JF646_Hoechst_H3K9me3-Cy3_CAICAiry/";
-for (f = 1; f < 11; f++) {
+basename = "20220201_Pos";
+for (f = 1; f < 8; f++) {
 	//f=1;
-	open(folder + "Snap_" + f + "_Airy.czi");
+	open(folder + basename + f + "_Airy.czi");
 	run("Split Channels");
-	selectImage("C1-Snap_" + f + "_Airy.czi");
+	selectImage("C1-" + basename + f + "_Airy.czi");
 	rename("HP1");
-	selectImage("C2-Snap_" + f + "_Airy.czi");
+	selectImage("C2-" + basename + f + "_Airy.czi");
 	rename("H3K9me3");
-	selectImage("C3-Snap_" + f + "_Airy.czi");
+	selectImage("C3-" + basename + f + "_Airy.czi");
 	rename("DNA");
 	
 	//Correct translation
@@ -262,17 +263,18 @@ for (f = 1; f < 11; f++) {
 //Thus, need to remeasure avg DNA intensities of foci and outfoci
 
 folder = "/home/sasha/Science/PhD/Laue_lab/Microscopy/Confocal/Histone_marks/20220201_HP1b-JF646_Hoechst_H3K9me3-Cy3_CAICAiry/";
+basename = "20220201_Pos";
 for (f = 1; f < 4; f++) {
 	roiManager("Open", folder + "Automatic_quantification/Pos" + f + "_roi.zip");
 	
 	//f=1;
-	open(folder + "Snap_" + f + "_Airy.czi");
+	open(folder + basename + f + "_Airy.czi");
 	run("Split Channels");
-	selectImage("C1-Snap_" + f + "_Airy.czi");
+	selectImage("C1-" + basename + f + "_Airy.czi");
 	rename("HP1");
-	selectImage("C2-Snap_" + f + "_Airy.czi");
+	selectImage("C2-" + basename + f + "_Airy.czi");
 	rename("H3K9me3");
-	selectImage("C3-Snap_" + f + "_Airy.czi");
+	selectImage("C3-" + basename + f + "_Airy.czi");
 	rename("DNA");
 	
 	//Correct translation
