@@ -1,9 +1,8 @@
 folder = "/home/sasha/Science/PhD/Laue_lab/Microscopy/STED/20230728-0801_HP1b_DNA_H3K9me3/";
-imgdir = "20230801/";
 filename = "HP1-JFX646_H3K9me3-af594_cell";
 savename = "HP1_H3K9me3_cell";
-for (f = 5; f < 9; f++) {
-	open(folder + imgdir + filename + d2s(f, 0) + "_STED_Gauss1.tif");
+for (f = 1; f < 9; f++) {
+	open(folder + filename + d2s(f, 0) + "_STED_Gauss1.tif");
 	run("Split Channels");
 	selectImage("C1-" + filename + d2s(f, 0) + "_STED_Gauss1.tif");
 	resetMinAndMax();
